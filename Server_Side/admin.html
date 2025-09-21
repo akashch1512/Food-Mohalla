@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hungry - Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF5A5F;
+            --secondary-color: #00A699;
+            --accent-color: #FC642D;
+            --dark-color: #2E2E2E;
+            --light-color: #F7F7F7;
+            --text-color: #484848;
+            --text-light: #767676;
+            --success-color: #00B14F;
+            --warning-color: #F39C12;
+            --danger-color: #E74C3C;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title-section {
+            flex: 1;
+            text-align: center;
+            min-width: 250px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .logo-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .smile-curve {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 15px;
+            border: 3px solid var(--primary-color);
+            border-top-color: transparent;
+            border-radius: 0 0 50px 50px;
+        }
+        
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 10px;
+            color: var(--dark-color);
+        }
+        
+        .reports-button, .manage-menu-button {
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .manage-menu-button {
+            background-color: var(--dark-color);
+        }
+        
+        .reports-button:hover {
+            background-color: #00857a;
+            transform: translateY(-2px);
+        }
+
+        .manage-menu-button:hover {
+            background-color: #484848;
+            transform: translateY(-2px);
+        }
+
+        /* Dropdown CSS */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .dropdown-btn:hover {
+            background-color: #00857a;
+            transform: translateY(-2px);
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+            right: 0;
+            left: auto; /* Aligns to the right */
+        }
+        
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .dropdown-content a:first-child {
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        .show {
+            display: block;
+        }
+
+        .order-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--text-light);
+        }
+
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 20px;
+            transition: var(--transition);
+            border-left: 5px solid transparent;
+        }
+
+        .order-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .order-card.pending-confirmation { border-left-color: var(--warning-color); }
+        .order-card.confirmed { border-left-color: var(--success-color); }
+        .order-card.delivered { border-left-color: var(--secondary-color); }
+        .order-card.cancelled { border-left-color: var(--danger-color); }
+
+
+        .order-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--dark-color);
+        }
+        
+        .order-card h3 span {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .order-card .customer-name {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .status-badge {
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .status-badge.pending-confirmation { background-color: var(--warning-color); }
+        .status-badge.confirmed { background-color: var(--success-color); }
+        .status-badge.delivered { background-color: var(--secondary-color); }
+        .status-badge.cancelled { background-color: var(--danger-color); }
+
+        .order-items {
+            list-style: none;
+            padding: 10px 0;
+            margin: 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .order-items li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .order-items li span:first-child {
+            font-weight: 500;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .confirm-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .deliver-btn {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background-color: #008c3e;
+            transform: translateY(-2px);
+        }
+        .deliver-btn:hover {
+            background-color: #00857a;
+            transform: translateY(-2px);
+        }
+        .cancel-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-light);
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        <i class="fas fa-bars"></i>
+                        Options
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="admin.html">Dashboard</a>
+                        <a href="menu_management.html">Manage Menu</a>
+                        <a href="report.html">View Reports</a>
+                    </div>
+                </div>
+                <div class="header-title-section">
+                    <h1 class="logo">
+                        h
+                        <span class="logo-text">
+                            <div class="smile-curve"></div>
+                        </span>
+                        ungryy
+                    </h1>
+                    <p class="dashboard-title">Staff Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-section">
+            <h2 class="section-title">Pending Orders</h2>
+            <div class="orders-grid" id="pending-orders-list"></div>
+        </div>
+
+        <div class="order-section">
+            <h2 class="section-title">Confirmed Orders</h2>
+            <div class="orders-grid" id="confirmed-orders-list"></div>
+        </div>
+
+        <div class="order-section">
+            <h2 class="section-title">Completed & Cancelled Orders</h2>
+            <div class="orders-grid" id="completed-orders-list"></div>
+        </div>
+    </div>
+    
+    <audio id="new-order-sound" src="../sound/hotel-bell-ding-1-174457.mp3" preload="auto"></audio>
+
+    <script>
+        const API_URL = 'https://backend-hungryy.onrender.com/api';
+
+        async function fetchOrders() {
+            try {
+                const response = await fetch(`${API_URL}/admin/orders`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch orders');
+                }
+                const orders = await response.json();
+                renderOrders(orders);
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                document.getElementById('pending-orders-list').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><h3>Failed to load orders.</h3></div>`;
+            }
+        }
+
+        function renderOrders(orders) {
+            const pendingOrdersList = document.getElementById('pending-orders-list');
+            const confirmedOrdersList = document.getElementById('confirmed-orders-list');
+            const completedOrdersList = document.getElementById('completed-orders-list');
+
+            pendingOrdersList.innerHTML = '';
+            confirmedOrdersList.innerHTML = '';
+            completedOrdersList.innerHTML = '';
+
+            const pendingOrders = orders.filter(o => o.status === 'Pending Confirmation');
+            const confirmedOrders = orders.filter(o => o.status === 'Confirmed');
+            const completedOrders = orders.filter(o => o.status === 'Delivered' || o.status === 'Cancelled');
+
+            // Render Pending Orders
+            if (pendingOrders.length === 0) {
+                pendingOrdersList.innerHTML = `<div class="empty-state"><i class="fas fa-utensils"></i><h3>No pending orders.</h3></div>`;
+            } else {
+                pendingOrders.forEach(order => {
+                    const orderCard = createOrderCard(order);
+                    pendingOrdersList.appendChild(orderCard);
+                });
+            }
+
+            // Render Confirmed Orders
+            if (confirmedOrders.length === 0) {
+                confirmedOrdersList.innerHTML = `<div class="empty-state"><i class="fas fa-check-circle"></i><h3>No confirmed orders.</h3></div>`;
+            } else {
+                confirmedOrders.forEach(order => {
+                    const orderCard = createOrderCard(order);
+                    confirmedOrdersList.appendChild(orderCard);
+                });
+            }
+
+            // Render Completed Orders
+            if (completedOrders.length === 0) {
+                completedOrdersList.innerHTML = `<div class="empty-state"><i class="fas fa-history"></i><h3>No completed or cancelled orders.</h3></div>`;
+            } else {
+                completedOrders.forEach(order => {
+                    const orderCard = createOrderCard(order);
+                    completedOrdersList.appendChild(orderCard);
+                });
+            }
+        }
+
+        function createOrderCard(order) {
+            const statusClass = order.status.toLowerCase().replace(/ /g, '-');
+            const orderCard = document.createElement('div');
+            orderCard.classList.add('order-card', statusClass);
+            orderCard.dataset.orderId = order.id;
+            
+            const orderItemsHtml = order.order_items.map(item => {
+                return `<li><span>${item.menu_item_name} (x${item.quantity})</span><span>₹${(item.price * item.quantity).toFixed(2)}</span></li>`;
+            }).join('');
+
+            let actionButtons = '';
+            if (order.status === 'Pending Confirmation') {
+                actionButtons = `
+                    <button class="action-btn confirm-btn" data-order-id="${order.id}" data-action="Confirmed">Confirm</button>
+                    <button class="action-btn cancel-btn" data-order-id="${order.id}" data-action="Cancelled">Cancel</button>
+                `;
+            } else if (order.status === 'Confirmed') {
+                actionButtons = `
+                    <button class="action-btn deliver-btn" data-order-id="${order.id}" data-action="Delivered">Mark as Delivered</button>
+                `;
+            }
+
+            orderCard.innerHTML = `
+                <h3>
+                    Order #${order.id}
+                </h3>
+                <p class="customer-name">Customer: ${order.customer_name}</p>
+                <p>Status: <span class="status-badge ${statusClass}">${order.status}</span></p>
+                <ul class="order-items">${orderItemsHtml}</ul>
+                <div class="order-total">
+                    <span>Total:</span>
+                    <span>₹${order.total_price.toFixed(2)}</span>
+                </div>
+                <div class="order-actions">${actionButtons}</div>
+            `;
+            return orderCard;
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const response = await fetch(`${API_URL}/admin/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to update order status');
+                }
+                const result = await response.json();
+                alert(result.message);
+                fetchOrders(); // Refresh the orders list
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                alert('Failed to update order status. Please try again.');
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const target = e.target.closest('.action-btn');
+            if (target) {
+                const orderId = parseInt(target.dataset.orderId);
+                const action = target.dataset.action;
+                updateOrderStatus(orderId, action);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchOrders();
+            // Poll for new orders every 15 seconds
+            setInterval(fetchOrders, 15000);
+        });
+
+        // Dropdown toggle functionality
+        document.querySelector('.dropdown-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.dropdown-btn')) {
+                const dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(dropdown => {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

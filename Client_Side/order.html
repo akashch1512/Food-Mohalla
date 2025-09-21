@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hungryyy - Order Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF5A5F;
+            --secondary-color: #00A699;
+            --accent-color: #FC642D;
+            --dark-color: #2E2E2E;
+            --light-color: #F7F7F7;
+            --text-color: #484848;
+            --text-light: #767676;
+            --success-color: #00B14F;
+            --warning-color: #F39C12;
+            --danger-color: #E74C3C;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .thank-you-message {
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .order-details-card {
+            background: #fdfdfd;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: left;
+        }
+        
+        .order-details-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .detail-item span:first-child {
+            font-weight: 500;
+        }
+        
+        .detail-item span:last-child {
+            color: var(--text-light);
+        }
+
+        .order-status-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            transition: color 0.5s ease;
+        }
+        
+        .status-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            transition: color 0.5s ease;
+        }
+        
+        #order-status.confirmed {
+            color: var(--success-color);
+        }
+        #order-status.denied {
+            color: var(--danger-color);
+        }
+        #order-status.completed {
+            color: var(--secondary-color);
+        }
+        
+        .confirmed-icon-animation {
+            animation: zoomIn 1.5s ease-out;
+        }
+        
+        @keyframes zoomIn {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .status-icon.pending-confirmation {
+            animation: pulse 2s infinite;
+        }
+        .status-icon.confirmed { color: var(--success-color); }
+        .status-icon.denied { color: var(--danger-color); }
+        .status-icon.completed { color: var(--secondary-color); }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        #order-items-summary {
+            padding-top: 10px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .action-button {
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .pay-button {
+            background-color: var(--success-color);
+        }
+
+        .cancel-button {
+            background-color: var(--danger-color);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .pay-button:hover { background-color: #008c3e; }
+        .cancel-button:hover { background-color: #C0392B; }
+
+        .back-to-menu-button {
+            margin-top: 30px;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-to-menu-button:hover {
+            transform: translateY(-3px);
+            background-color: #00857a;
+        }
+
+        .refresh-status-button {
+            margin-top: 15px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+            background-color: transparent;
+            border: 1px solid var(--secondary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .refresh-status-button:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Modal for user details */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 400px;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="order-container">
+    </div>
+
+    <div class="modal-overlay" id="user-details-modal">
+        <div class="modal-content">
+            <h3>Please provide your details</h3>
+            <form id="user-details-form">
+                <div class="form-group">
+                    <label for="customer-name">Name</label>
+                    <input type="text" id="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Phone Number</label>
+                    <input type="tel" id="customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email (Optional)</label>
+                    <input type="email" id="customer-email">
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="action-button pay-button">Proceed to Pay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <audio id="confirmation-sound" src="../sound/sample_confirm_success01_kofi_by_miraclei-360153.mp3" preload="auto"></audio>
+
+    <script>
+        const API_URL = 'https://backend-hungryy.onrender.com/api';
+        let currentOrder = null;
+
+        const orderContainer = document.getElementById('order-container');
+        const userDetailsModal = document.getElementById('user-details-modal');
+        const userDetailsForm = document.getElementById('user-details-form');
+
+        async function fetchLatestOrderStatus(orderId) {
+            try {
+                const response = await fetch(`${API_URL}/admin/orders`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch orders');
+                }
+                const orders = await response.json();
+                const latestOrder = orders.find(o => o.order_id == orderId || o.id == orderId);
+                return latestOrder;
+            } catch (error) {
+                console.error('Error fetching order status:', error);
+                return null;
+            }
+        }
+
+        async function updateOrderStatusFromBackend() {
+            if (!currentOrder || !currentOrder.orderId) return;
+            
+            const latestOrder = await fetchLatestOrderStatus(currentOrder.orderId);
+            if (latestOrder && latestOrder.status !== currentOrder.status) {
+                currentOrder.status = latestOrder.status;
+                localStorage.setItem('lastOrder', JSON.stringify(currentOrder));
+                renderOrder(currentOrder);
+                console.log('Order status updated to:', latestOrder.status);
+            }
+            updateLastUpdatedTime();
+        }
+
+        function renderOrder(order) {
+            if (!order) {
+                orderContainer.innerHTML = `
+                    <div class="header">
+                        <div class="logo">Hungryyy</div>
+                    </div>
+                    <h2 class="thank-you-message">No active order found.</h2>
+                    <a href="menu.html" class="back-to-menu-button" style="display:inline-block;">Start a New Order</a>
+                `;
+                return;
+            }
+
+            currentOrder = order;
+            const statusClass = order.status.toLowerCase().replace(/ /g, '-');
+            let statusIconClass = 'fas fa-clock pending-confirmation';
+            let actionButtonsHtml = '';
+
+            switch (order.status) {
+                case 'Pending Confirmation':
+                    statusIconClass = 'fas fa-clock pending-confirmation';
+                    actionButtonsHtml = `
+                        <div class="action-buttons" id="action-buttons">
+                            <button class="action-button pay-button" id="pay-button">Pay Now</button>
+                            <button class="action-button cancel-button" id="cancel-button">Cancel Order</button>
+                        </div>
+                    `;
+                    break;
+                case 'Confirmed':
+                    statusIconClass = 'fas fa-check-circle confirmed';
+                    actionButtonsHtml = `<p>Your order is confirmed and is being prepared!</p>`;
+                    break;
+                case 'Delivered':
+                    statusIconClass = 'fas fa-utensils completed';
+                    actionButtonsHtml = `<a href="menu.html" class="back-to-menu-button" style="display:inline-block;">Place Another Order</a>`;
+                    break;
+                case 'Denied':
+                case 'Cancelled':
+                    statusIconClass = 'fas fa-times-circle denied';
+                    actionButtonsHtml = `<a href="menu.html" class="back-to-menu-button" style="display:inline-block;">Place Another Order</a>`;
+                    break;
+                default:
+                    statusIconClass = 'fas fa-question-circle';
+                    actionButtonsHtml = `<p>Status could not be determined. Please contact support.</p>`;
+            }
+
+            let itemsHtml = '';
+            let totalAmount = 0;
+            
+            if (order.items && Array.isArray(order.items)) {
+                itemsHtml = order.items.map(item => {
+                    const itemName = item.name || 'Unknown Item';
+                    const itemQuantity = item.quantity || 0;
+                    const itemPrice = item.price || 0;
+                    const itemTotalPrice = itemQuantity * itemPrice;
+                    totalAmount += itemTotalPrice;
+                    return `<div class="summary-item">
+                        <span>${itemName} (x${itemQuantity})</span>
+                        <span>₹${itemTotalPrice.toFixed(2)}</span>
+                    </div>`;
+                }).join('');
+            } else if (order.items && typeof order.items === 'object') {
+                itemsHtml = Object.keys(order.items).map(itemName => {
+                    const itemDetails = order.items[itemName];
+                    const itemQuantity = itemDetails.quantity || 0;
+                    const itemPrice = itemDetails.price || 0;
+                    const itemTotalPrice = itemQuantity * itemPrice;
+                    totalAmount += itemTotalPrice;
+                    return `<div class="summary-item">
+                        <span>${itemName} (x${itemQuantity})</span>
+                        <span>₹${itemTotalPrice.toFixed(2)}</span>
+                    </div>`;
+                }).join('');
+            }
+            
+            if (order.total_price > 0) {
+                 totalAmount = order.total_price;
+            }
+
+            orderContainer.innerHTML = `
+                <div class="header">
+                    <div class="logo">Hungryyy</div>
+                    <div class="tagline">Scan, Order, Eat</div>
+                </div>
+                <h2 class="thank-you-message">Thank You for your Order!</h2>
+                <div class="order-details-card">
+                    <div class="order-status-section">
+                        <span class="status-text" id="order-status">${order.status}</span>
+                        <i class="${statusIconClass} status-icon" id="status-icon"></i>
+                    </div>
+                    <div class="detail-item">
+                        <span>Order No.:</span>
+                        <span id="order-number">#${order.orderId || order.id || ''}</span>
+                    </div>
+                    <button class="refresh-status-button" id="refresh-status-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh Status
+                    </button>
+                    <div class="last-updated" id="last-updated">Last updated: Just now</div>
+                </div>
+                <div class="order-details-card">
+                    <h3>Order Summary</h3>
+                    <div id="order-items-summary">${itemsHtml}</div>
+                    <div class="summary-total">
+                        <span>Total Amount:</span>
+                        <span id="total-amount">₹${totalAmount.toFixed(2)}</span>
+                    </div>
+                </div>
+                ${actionButtonsHtml}
+            `;
+
+            attachActionListeners();
+        }
+
+        function attachActionListeners() {
+            const payButton = document.getElementById('pay-button');
+            if (payButton) {
+                payButton.addEventListener('click', () => {
+                    userDetailsModal.classList.add('show');
+                });
+            }
+
+            const cancelButton = document.getElementById('cancel-button');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', () => {
+                    if (confirm("Are you sure you want to cancel this order?")) {
+                        cancelOrder();
+                    }
+                });
+            }
+
+            const refreshButton = document.getElementById('refresh-status-btn');
+            if (refreshButton) {
+                refreshButton.addEventListener('click', async () => {
+                    refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+                    await updateOrderStatusFromBackend();
+                    refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
+                    updateLastUpdatedTime();
+                });
+            }
+        }
+        
+        async function cancelOrder() {
+            try {
+                const response = await fetch(`${API_URL}/orders/${currentOrder.orderId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'Cancelled' })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to cancel order');
+                }
+
+                currentOrder.status = 'Cancelled';
+                localStorage.setItem('lastOrder', JSON.stringify(currentOrder));
+                renderOrder(currentOrder);
+                alert('Order has been successfully cancelled.');
+
+            } catch (error) {
+                console.error('Cancellation Error:', error);
+                alert('There was an error canceling your order. Please try again.');
+            }
+        }
+
+        function updateLastUpdatedTime() {
+            const lastUpdatedElement = document.getElementById('last-updated');
+            if (lastUpdatedElement) {
+                const now = new Date();
+                lastUpdatedElement.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+            }
+        }
+
+        async function startPayment(userDetails) {
+            try {
+                orderContainer.innerHTML += `<p id='payment-status-msg' style='margin-top:20px;color:#888;'>Processing payment, please wait...</p>`;
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                currentOrder.status = 'Confirmed';
+                localStorage.setItem('lastOrder', JSON.stringify(currentOrder));
+                renderOrder(currentOrder);
+            } catch (error) {
+                alert('Could not process payment. Please try again.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderDetailsString = localStorage.getItem('lastOrder');
+            if (orderDetailsString) {
+                const order = JSON.parse(orderDetailsString);
+                renderOrder(order);
+                
+                if (order && order.orderId) {
+                    setInterval(updateOrderStatusFromBackend, 10000);
+                    updateOrderStatusFromBackend();
+                }
+            } else {
+                renderOrder(null);
+            }
+        });
+
+        userDetailsForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const userDetails = {
+                customer_name: document.getElementById('customer-name').value,
+                customer_phone: document.getElementById('customer-phone').value,
+                customer_email: document.getElementById('customer-email').value,
+            };
+            userDetailsModal.classList.remove('show');
+            startPayment(userDetails);
+        });
+
+        userDetailsModal.addEventListener('click', (e) => {
+            if (e.target === userDetailsModal) {
+                userDetailsModal.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
